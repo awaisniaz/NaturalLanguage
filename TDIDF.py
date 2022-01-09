@@ -1,9 +1,3 @@
-# Bag of Words
-
-# sentence 1 = "He is a good boy"
-# "sentense 2 = She is a good girl"
-# "Sentense 3  = Boy and girl are good"
-
 import nltk
 import re
 import pandas as pd
@@ -21,15 +15,12 @@ for i in range(len(sentense)):
     review = re.sub('[^a-zA-Z]',' ',sentense[i])
     review = review.lower()
     review = review.split()
-    review = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]
+    review = [WordNetLemmatizer().lemmatize(word) for word in review if not word in set(stopwords.words('english'))]
     review = ' '.join(review)
     corpus.append(review)
 
-from sklearn.feature_extraction.text import CountVectorizer
-cv = CountVectorizer(max_features=1500)
+from sklearn.feature_extraction.text import CountVectorizer,TfidfVectorizer
+cv = TfidfVectorizer(max_features=1500)
 x = cv.fit_transform(corpus).toarray()
 
 print(pd.DataFrame(x))
-
-
-
